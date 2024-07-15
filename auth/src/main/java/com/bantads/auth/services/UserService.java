@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -48,5 +49,29 @@ public class UserService {
 
     public List<User> listar(){
         return userRepository.findAll();
+    }
+
+    public Optional<User> removeCliente(String id){
+        Optional<User> cliente = userRepository.findById(id);
+        if (cliente.isPresent()){
+            userRepository.deleteById(id);
+            System.out.println("Usuario removido com sucesso!");
+            return cliente;
+        }else {
+            System.out.println("Usuario não existente!");
+            return cliente;
+        }
+    }
+
+    public Optional<User> removeGerente(String id){
+        Optional<User> gerente = userRepository.findById(id);
+        if (gerente.isPresent()){
+            userRepository.deleteById(id);
+            System.out.println("gerente removido com sucesso!");
+            return gerente;
+        }else {
+            System.out.println("O gerente não existente!");
+            return gerente;
+        }
     }
 }
