@@ -11,15 +11,14 @@ public class RabbitMQConfig {
 
     @Value("${spring.rabbitmq.queue.autocadastro}")
     public String filaAutocadastro;
+    @Value("${spring.rabbitmq.queue.atualizaUsuario}")
+    public String filaAtualizaUsuario;
+    @Value("${spring.rabbitmq.queue.removeUsuario}")
+    public String filaRemoveUsuario;
     @Value("${spring.rabbitmq.queue.novoGerente}")
     public String filaNovoGerente;
     @Value("${spring.rabbitmq.queue.novoAdmin}")
     public String filaNovoAdmin;
-    @Value("${spring.rabbitmq.queue.removeCliente}")
-    public String filaRemoveCliente;
-    @Value("${spring.rabbitmq.queue.removeGerente}")
-    public String filaRemoveGerente;
-
 
     @Bean
     public Queue autocadastro(){
@@ -27,8 +26,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue novoAdmin(){
-        return new Queue(filaNovoAdmin , true);
+    public Queue atualizaCliente(){
+        return new Queue(filaAtualizaUsuario , true);
+    }
+
+    @Bean
+    public Queue removeCliente(){
+        return new Queue(filaRemoveUsuario , true);
     }
 
     @Bean
@@ -37,18 +41,13 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Queue removeCliente(){
-        return new Queue(filaRemoveCliente , true);
+    public Queue novoAdmin(){
+        return new Queue(filaNovoAdmin , true);
     }
 
-    @Bean
-    public Queue removeGerente(){
-        return new Queue(filaRemoveGerente , true);
-    }
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {
         return new Jackson2JsonMessageConverter();
     }
-
 }

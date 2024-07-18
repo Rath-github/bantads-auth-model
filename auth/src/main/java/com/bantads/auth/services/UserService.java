@@ -47,31 +47,43 @@ public class UserService {
         return new UserResponseDto(createdUser.getId(), createdUser.getUsername(), "ROLE_" + createdUser.getUserRole().getRole());
     }
 
+    public User atualizarUsuario(String id, DadosAuthDto user ){
+        Optional<User> usuarioEncontrado = userRepository.findById(id);
+
+        if (usuarioEncontrado.isPresent()) {
+            User usuario = usuarioEncontrado.get();
+            usuario.setUsername(user.username());
+            usuario.setPassword(passwordEncoder.encode(user.password()));
+            switch (user.role()){
+                case 1:
+                    usuario.setUserRole(Roles.CLIENT);
+                    break;
+                case 2:
+                    usuario.setUserRole(Roles.GERENTE);
+                    break;
+                case 3:
+                    usuario.setUserRole(Roles.ADMIN);
+                    break;
+            }
+            return userRepository.save(usuario);
+        } else {
+            throw new RuntimeException("Usuario não existente! id:  " + id);
+        }
+    }
+
     public List<User> listar(){
         return userRepository.findAll();
     }
 
-    public Optional<User> removeCliente(String id){
-        Optional<User> cliente = userRepository.findById(id);
-        if (cliente.isPresent()){
+    public Optional<User> removeUsuario(String id){
+        Optional<User> usuario = userRepository.findById(id);
+        if (usuario.isPresent()){
             userRepository.deleteById(id);
-            System.out.println("Usuario removido com sucesso!");
-            return cliente;
+            System.out.println("usuario removido com sucesso!");
+            return usuario;
         }else {
-            System.out.println("Usuario não existente!");
-            return cliente;
-        }
-    }
-
-    public Optional<User> removeGerente(String id){
-        Optional<User> gerente = userRepository.findById(id);
-        if (gerente.isPresent()){
-            userRepository.deleteById(id);
-            System.out.println("gerente removido com sucesso!");
-            return gerente;
-        }else {
-            System.out.println("O gerente não existente!");
-            return gerente;
+            System.out.println("O usuario não existente!");
+            return usuario;
         }
     }
 }
