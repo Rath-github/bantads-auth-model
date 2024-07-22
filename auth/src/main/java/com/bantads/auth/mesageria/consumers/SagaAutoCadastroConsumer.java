@@ -13,7 +13,7 @@ public class SagaAutoCadastroConsumer {
     @Autowired
     private UserService userService;
 
-    @RabbitListener(queues = "${spring.rabbitmq.queue.autocadastro}")
+    @RabbitListener(queues = "${spring.rabbitmq.autocadastro}")
     public void listen(@Payload DadosAuthDto novoCliente) {
         try {
             UserResponseDto userCriado = userService.create(novoCliente);

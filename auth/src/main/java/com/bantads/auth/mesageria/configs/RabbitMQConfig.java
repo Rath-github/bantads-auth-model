@@ -9,42 +9,41 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${spring.rabbitmq.queue.autocadastro}")
-    public String filaAutocadastro;
-    @Value("${spring.rabbitmq.queue.atualizaUsuario}")
-    public String filaAtualizaUsuario;
-    @Value("${spring.rabbitmq.queue.removeUsuario}")
-    public String filaRemoveUsuario;
-    @Value("${spring.rabbitmq.queue.novoGerente}")
-    public String filaNovoGerente;
-    @Value("${spring.rabbitmq.queue.novoAdmin}")
-    public String filaNovoAdmin;
+    @Value("${spring.rabbitmq.autocadastro}")
+    public String autocadastro;
+    @Value("${spring.rabbitmq.novoGerente}")
+    public String novogerente;
+    @Value("${spring.rabbitmq.novoAdmin}")
+    public String novoadmin;
+    @Value("${spring.rabbitmq.atualizaUsuario}")
+    public String atualizausuario;
+    @Value("${spring.rabbitmq.removeUsuario}")
+    public String removeusuario;
 
     @Bean
     public Queue autocadastro(){
-        return new Queue(filaAutocadastro , true);
-    }
-
-    @Bean
-    public Queue atualizaCliente(){
-        return new Queue(filaAtualizaUsuario , true);
-    }
-
-    @Bean
-    public Queue removeCliente(){
-        return new Queue(filaRemoveUsuario , true);
+        return new Queue(autocadastro , true);
     }
 
     @Bean
     public Queue novoGerente(){
-        return new Queue(filaNovoGerente , true);
+        return new Queue(novogerente , true);
     }
 
     @Bean
     public Queue novoAdmin(){
-        return new Queue(filaNovoAdmin , true);
+        return new Queue(novoadmin , true);
     }
 
+    @Bean
+    public Queue atualizaUsuario(){
+        return new Queue(atualizausuario , true);
+    }
+
+    @Bean
+    public Queue removeUsuario(){
+        return new Queue(removeusuario , true);
+    }
 
     @Bean
     public Jackson2JsonMessageConverter messageConverter() {

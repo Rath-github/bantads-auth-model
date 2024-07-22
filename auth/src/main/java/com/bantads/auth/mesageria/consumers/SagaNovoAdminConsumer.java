@@ -13,7 +13,7 @@ public class SagaNovoAdminConsumer {
     @Autowired
     private UserService userService;
 
-    @RabbitListener(queues = "${spring.rabbitmq.queue.novoAdmin}")
+    @RabbitListener(queues = "${spring.rabbitmq.novoAdmin}")
     public void listen(@Payload DadosAuthDto novoAdmin) {
         try {
             UserResponseDto userCriado = userService.create(novoAdmin);
