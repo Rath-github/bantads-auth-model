@@ -2,6 +2,7 @@ package com.MensagemTads.MensagemTadsProd.produtor;
 
 import com.MensagemTads.MensagemTadsProd.model.DadosAuthDto;
 import com.MensagemTads.MensagemTadsProd.model.DadosEditDto;
+import com.MensagemTads.MensagemTadsProd.model.DadosNovoClienteDto;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,8 +12,8 @@ import org.springframework.stereotype.Service;
 public class MensagemProducer {
     private final RabbitTemplate rabbitTemplate;
 
-    @Value("${spring.rabbitmq.autocadastro}")
-    public String autocadastro;
+    @Value("${spring.rabbitmq.aprovacliente}")
+    public String aprovacliente;
     @Value("${spring.rabbitmq.novoGerente}")
     public String novogerente;
     @Value("${spring.rabbitmq.novoAdmin}")
@@ -27,8 +28,8 @@ public class MensagemProducer {
         this.rabbitTemplate = rabbitTemplate;
     }
 
-    public void autocadastro(DadosAuthDto dadosAuthDto){
-        rabbitTemplate.convertAndSend(autocadastro, dadosAuthDto);
+    public void aprovacliente(DadosNovoClienteDto dadosAuthDto){
+        rabbitTemplate.convertAndSend(aprovacliente, dadosAuthDto);
         System.out.println("Cadastro de Cliente efetuado: ");
     }
     public void novoGerente(DadosAuthDto dadosAuthDto){

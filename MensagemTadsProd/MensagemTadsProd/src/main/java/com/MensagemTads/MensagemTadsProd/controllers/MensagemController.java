@@ -2,6 +2,7 @@ package com.MensagemTads.MensagemTadsProd.controllers;
 
 import com.MensagemTads.MensagemTadsProd.model.DadosAuthDto;
 import com.MensagemTads.MensagemTadsProd.model.DadosEditDto;
+import com.MensagemTads.MensagemTadsProd.model.DadosNovoClienteDto;
 import com.MensagemTads.MensagemTadsProd.produtor.MensagemProducer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,9 @@ public class MensagemController {
     @Autowired
     private MensagemProducer mensagemProducer;
 
-    @PostMapping("/autocadastro")
-    public void autocadastro(@RequestBody DadosAuthDto dadosAuthDto) {
-        mensagemProducer.autocadastro(dadosAuthDto);
+    @PostMapping("/aprovacliente")
+    public void autocadastro(@RequestBody DadosNovoClienteDto dadosAuthDto) {
+        mensagemProducer.aprovacliente(dadosAuthDto);
     }
     @PostMapping("/novogerente")
     public void novoGerente(@RequestBody DadosAuthDto dadosAuthDto) {

@@ -2,12 +2,14 @@ package com.bantads.auth.services;
 
 import com.bantads.auth.dtos.DadosAuthDto;
 import com.bantads.auth.dtos.DadosEditDto;
+import com.bantads.auth.dtos.DadosNovoClienteDto;
 import com.bantads.auth.dtos.UserResponseDto;
 import com.bantads.auth.exeptions.RoleNaoPermitidaException;
 import com.bantads.auth.exeptions.UsuarioJaExisteException;
 import com.bantads.auth.models.User;
 import com.bantads.auth.repositories.UserRepository;
 import com.bantads.auth.roles.Roles;
+import com.bantads.auth.util.GeraSenha;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,6 +23,32 @@ public class UserService {
     UserRepository userRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private EmailService emailService;
+
+    public UserResponseDto novoCliente(DadosNovoClienteDto user) throws UsuarioJaExisteException, RoleNaoPermitidaException {
+        User existUser = userRepository.findByUsername(user.username());
+        if(existUser != null){
+            throw new UsuarioJaExisteException("Usuario ja existe!");
+        }
+
+        User novoUsuario = new User();
+        novoUsuario.setUserRole(Roles.CLIENT);
+        String senha = GeraSenha.generatePassword();
+        novoUsuario.setPassword(passwordEncoder.encode(senha));
+        novoUsuario.setUsername(user.username());
+        User createdUser = userRepository.save(novoUsuario);
+
+        try {
+            String mensagem = "Temos uma boa noticia sua conta no Bantads foi aprovada! Aproveite todos os beneficios acessando a sua conta com o username cadastrado e a sua senha: \n" + senha +
+                    "\n\n\nAgora voce faz parte do maior banco do SEPT!";
+            emailService.enviarCredencialEmail(user.email(), "Aprovação da sua conta BanTads!", mensagem);
+        } catch (Exception e) {
+            System.err.println("Erro ao enviar email: " + e.getMessage());
+        }
+
+        return new UserResponseDto(createdUser.getId(), createdUser.getUsername(), "ROLE_" + createdUser.getUserRole().getRole());
+    }
 
     public UserResponseDto create(DadosAuthDto user) throws UsuarioJaExisteException, RoleNaoPermitidaException {
         User existUser = userRepository.findByUsername(user.username());
@@ -30,9 +58,6 @@ public class UserService {
 
         User novoUsuario = new User();
         switch (user.role()){
-            case 1:
-                novoUsuario.setUserRole(Roles.CLIENT);
-                break;
             case 2:
                 novoUsuario.setUserRole(Roles.GERENTE);
                 break;

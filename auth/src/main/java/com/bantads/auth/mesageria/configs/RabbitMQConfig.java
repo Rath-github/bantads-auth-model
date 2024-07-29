@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    @Value("${spring.rabbitmq.autocadastro}")
-    public String autocadastro;
+    @Value("${spring.rabbitmq.aprovacliente}")
+    public String aprovacliente;
     @Value("${spring.rabbitmq.novoGerente}")
     public String novogerente;
     @Value("${spring.rabbitmq.novoAdmin}")
@@ -22,7 +22,7 @@ public class RabbitMQConfig {
 
     @Bean
     public Queue autocadastro(){
-        return new Queue(autocadastro , true);
+        return new Queue(aprovacliente , true);
     }
 
     @Bean
