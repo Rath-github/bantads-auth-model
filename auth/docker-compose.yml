@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq_management
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    restart: unless-stopped
+    networks:
+      - conta-network
+
+  mongodb:
+    container_name: mongo_auth
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: authDatabase
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - conta-network
+    restart: always
+
+  auth:
+    build: .
+    image: bantads_auth
+    container_name: bantads_auth_container
+    ports:
+      - "8081:8081"
+    networks:
+      - conta-network
+    depends_on:
+      - rabbitmq
+      - mongodb
+    restart: on-failure
+
+volumes:
+  mongo_data:
+
+networks:
+  conta-network:
+    external: false
